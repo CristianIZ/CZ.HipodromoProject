@@ -19,8 +19,8 @@ namespace CZ.Infrastructure
         public DbSet<Category> Categories { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<WaitingClient> WaitingLists { get; set; }
-        public DbSet<ClientReservation> ClientReservations { get; set; }
         public DbSet<Daytime> Daytimes { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

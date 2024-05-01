@@ -18,7 +18,6 @@ namespace CZ.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<ReservationRepository, ReservationRepository>();
-            builder.Services.AddScoped<ClientReservationRepository, ClientReservationRepository>();
             builder.Services.AddScoped<ClientReservationService, ClientReservationService>();
             builder.Services.AddScoped<ClientRepository, ClientRepository>();
             builder.Services.AddScoped<TableRepository, TableRepository>();

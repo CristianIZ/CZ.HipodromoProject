@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CZ.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -92,11 +92,12 @@ namespace CZ.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservation",
+                name: "Reservations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
                     TableId = table.Column<int>(type: "int", nullable: false),
                     DaytimeId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -107,15 +108,21 @@ namespace CZ.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservation", x => x.Id);
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservation_Daytimes_DaytimeId",
+                        name: "FK_Reservations_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Daytimes_DaytimeId",
                         column: x => x.DaytimeId,
                         principalTable: "Daytimes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservation_Tables_TableId",
+                        name: "FK_Reservations_Tables_TableId",
                         column: x => x.TableId,
                         principalTable: "Tables",
                         principalColumn: "Id",
@@ -145,59 +152,24 @@ namespace CZ.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ClientReservations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    ReservationId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientReservations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClientReservations_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClientReservations_Reservation_ReservationId",
-                        column: x => x.ReservationId,
-                        principalTable: "Reservation",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientReservations_ClientId",
-                table: "ClientReservations",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClientReservations_ReservationId",
-                table: "ClientReservations",
-                column: "ReservationId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_CategoryId",
                 table: "Clients",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_DaytimeId",
-                table: "Reservation",
+                name: "IX_Reservations_ClientId",
+                table: "Reservations",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_DaytimeId",
+                table: "Reservations",
                 column: "DaytimeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_TableId",
-                table: "Reservation",
+                name: "IX_Reservations_TableId",
+                table: "Reservations",
                 column: "TableId");
 
             migrationBuilder.CreateIndex(
@@ -210,22 +182,19 @@ namespace CZ.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientReservations");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "WaitingLists");
-
-            migrationBuilder.DropTable(
-                name: "Reservation");
-
-            migrationBuilder.DropTable(
-                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Daytimes");
 
             migrationBuilder.DropTable(
                 name: "Tables");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Categories");

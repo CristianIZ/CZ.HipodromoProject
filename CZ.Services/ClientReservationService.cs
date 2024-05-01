@@ -12,19 +12,16 @@ namespace CZ.Services
     public class ClientReservationService
     {
         ReservationRepository _reservationRepository;
-        ClientReservationRepository _clientReservationRepository;
         ClientRepository _clientRepository;
         TableRepository _tableRepository;
         DaytimeRepository _daytimeRepository;
 
         public ClientReservationService(ReservationRepository reservationRepository,
-            ClientReservationRepository clientReservationRepository,
             ClientRepository clientRepository,
             TableRepository tableRepository,
             DaytimeRepository daytimeRepository)
         {
             this._reservationRepository = reservationRepository;
-            this._clientReservationRepository = clientReservationRepository;
             this._clientRepository = clientRepository;
             this._tableRepository = tableRepository;
             this._daytimeRepository = daytimeRepository;
@@ -41,16 +38,14 @@ namespace CZ.Services
 
                 var table = await this._tableRepository.GetById(reservationDto.Table.Id);
 
-                Reservation reservation = new Reservation(table, await _daytimeRepository.GetById(1), reservationDto.Date);
+                var reservationsByClient = await _reservationRepository.GetClientReservationByClientId(client.Id);
 
-                var reservationsByClient = await _clientReservationRepository.GetClientReservationByClientKey(client);
+                var clientReservation = new Reservation(reservationsByClient, client, table, await _daytimeRepository.GetById(1), reservationDto.Date);
 
-                var clientReservation = new ClientReservation(reservationsByClient, client, reservation);
+                var clientReservationResult = this._reservationRepository.Add(clientReservation);
+                this._reservationRepository.SaveChanges();
 
-                var clientReservationResult = this._clientReservationRepository.Add(clientReservation);
-                this._clientReservationRepository.SaveChanges();
-
-                return clientReservationResult.Reservation.Table.Id.ToString();
+                return clientReservationResult.TableId.ToString();
             }
             catch (Exception ex)
             {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CZ.Infrastructure.Migrations
 {
     [DbContext(typeof(EFCZContext))]
-    [Migration("20240424052439_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240424135003_InitialSchema")]
+    partial class InitialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,41 +102,6 @@ namespace CZ.Infrastructure.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("CZ.Domain.ClientReservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ReservationId");
-
-                    b.ToTable("ClientReservations");
-                });
-
             modelBuilder.Entity("CZ.Domain.Daytime", b =>
                 {
                     b.Property<int>("Id")
@@ -177,6 +142,9 @@ namespace CZ.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -200,11 +168,13 @@ namespace CZ.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("DaytimeId");
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("Reservation");
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("CZ.Domain.Table", b =>
@@ -276,7 +246,7 @@ namespace CZ.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("CZ.Domain.ClientReservation", b =>
+            modelBuilder.Entity("CZ.Domain.Reservation", b =>
                 {
                     b.HasOne("CZ.Domain.Client", "Client")
                         .WithMany()
@@ -284,19 +254,6 @@ namespace CZ.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CZ.Domain.Reservation", "Reservation")
-                        .WithMany()
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Reservation");
-                });
-
-            modelBuilder.Entity("CZ.Domain.Reservation", b =>
-                {
                     b.HasOne("CZ.Domain.Daytime", "Daytime")
                         .WithMany()
                         .HasForeignKey("DaytimeId")
@@ -308,6 +265,8 @@ namespace CZ.Infrastructure.Migrations
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
 
                     b.Navigation("Daytime");
 

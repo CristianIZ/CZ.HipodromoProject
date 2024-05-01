@@ -7,7 +7,6 @@ namespace CZ.Infrastructure.Migrations
     /// <inheritdoc />
     public partial class InsertDefaultValues : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Categories
@@ -15,7 +14,7 @@ namespace CZ.Infrastructure.Migrations
             migrationBuilder.Sql("INSERT INTO [Categories] ([Name]) VALUES ('Gold')");
             migrationBuilder.Sql("INSERT INTO [Categories] ([Name]) VALUES ('Platinum')");
             migrationBuilder.Sql("INSERT INTO [Categories] ([Name]) VALUES ('Diamond')");
-            
+
             // Clients
             migrationBuilder.Sql("INSERT INTO [Clients] ([CategoryId], [Name], [LastName], [DNI], [TucsonSubscriptionNumber], [Key]) VALUES (1, 'Client1', 'LastName1', '12313', 1, NEWID())");
             migrationBuilder.Sql("INSERT INTO [Clients] ([CategoryId], [Name], [LastName], [DNI], [TucsonSubscriptionNumber], [Key]) VALUES (1, 'Client2', 'LastName2', '45566', 2, NEWID())");
@@ -23,7 +22,7 @@ namespace CZ.Infrastructure.Migrations
             migrationBuilder.Sql("INSERT INTO [Clients] ([CategoryId], [Name], [LastName], [DNI], [TucsonSubscriptionNumber], [Key]) VALUES (2, 'Client4', 'LastName4', '14717', 4, NEWID())");
             migrationBuilder.Sql("INSERT INTO [Clients] ([CategoryId], [Name], [LastName], [DNI], [TucsonSubscriptionNumber], [Key]) VALUES (3, 'Client5', 'LastName5', '25852', 5, NEWID())");
             migrationBuilder.Sql("INSERT INTO [Clients] ([CategoryId], [Name], [LastName], [DNI], [TucsonSubscriptionNumber], [Key]) VALUES (4, 'Client6', 'LastName6', '36963', 6, NEWID())");
-            
+
             // Daytime
             migrationBuilder.Sql("INSERT INTO [Daytimes] ([Code], [Name]) VALUES (1, 'Noche')");
 
@@ -62,7 +61,7 @@ namespace CZ.Infrastructure.Migrations
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (4)");
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (4)");
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (4)");
-            
+
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (6)");
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (6)");
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (6)");
@@ -72,7 +71,7 @@ namespace CZ.Infrastructure.Migrations
             migrationBuilder.Sql("INSERT INTO [Tables] ([CutleryQuantity]) VALUES (6)");
         }
 
-        /// <inheritdoc />
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("TRUNCATE TABLE [Tables]");
